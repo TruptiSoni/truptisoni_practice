@@ -1,0 +1,71 @@
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Department VARCHAR(50),
+    Salary DECIMAL(10, 2),
+    HireDate DATE
+);
+
+
+INSERT INTO Employees (FirstName, LastName, Department, Salary, HireDate)
+VALUES
+('Amit', 'Sharma', 'Engineering', 65000, '2022-01-15'),
+('Priya', 'Mehta', 'HR', 55000, '2021-06-01'),
+('Rohan', 'Verma', 'Engineering', 80000, '2020-09-10'),
+('Sneha', 'Patel', 'Sales', 50000, '2023-03-20'),
+('Anjali', 'Reddy', 'HR', 60000, '2022-08-05');
+
+--Update Data:
+
+UPDATE Employees
+SET Salary = Salary + 7000
+WHERE Department = 'HR';
+
+--Filter example:
+
+SELECT * 
+FROM Employees
+WHERE Salary > 70000;
+
+--Delete Example:
+
+DELETE FROM Employees
+WHERE HireDate < '2021-01-01';
+
+-- OrderBy:
+
+SELECT FirstName, LastName, Salary
+FROM Employees
+ORDER BY Salary DESC;
+
+--Group by:
+SELECT Department, AVG(Salary) AS AverageSalary
+FROM Employees
+GROUP BY Department;
+
+--BETWEEN 
+
+SELECT FirstName, LastName, HireDate
+FROM Employees
+WHERE HireDate BETWEEN '2022-01-01' AND '2022-12-31';
+
+--Stored PROCEDURE
+
+DELIMITER $$
+
+CREATE PROCEDURE GetEmployeesBySalaryAndDepartment (
+    IN MinSalary DECIMAL(10, 2),
+    IN Dept VARCHAR(50)
+)
+BEGIN
+    SELECT FirstName, LastName, Department, Salary
+    FROM Employees
+    WHERE Salary >= MinSalary AND Department = Dept;
+END $$
+
+DELIMITER ;
+
+
+CALL GetEmployeesBySalaryAndDepartment(60000, 'Engineering');
+
